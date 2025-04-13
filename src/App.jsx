@@ -1,17 +1,39 @@
 import React, { useState } from 'react'
 import './App.css'
+import Form from './Form'
+import SearchBar from './SearchBar'
+import ExpenseTable from './ExpenseTable'
 
 function App() {
-  return (
-    <div>
-      <h3>EXPENSE TRACKER </h3>
+   const [expenses, setExpenses] = useState([])
+   const [search, setSearch] = useState('')
 
-      <div id='form-container'>
-        <form id='addExpenseForm'>
-          <label>Expense</label>
-          <input type='text' placeholder='Add expense...'></input>
-        </form>
+   const handleAddExpense = (newExpense) => {
+    const newExpenseWithId = { ...newExpense, id: Date.now() }
+    setExpenses((prevExpenses ) => [ ...prevExpenses, newExpenseWithId])
+   }
+   
+   
+
+    const filteredExpenses = expenses.filter((expense) =>
+    expense.name.toLowerCase().includes(search.toLowerCase()) ||
+    expense.description.toLowerCase().includes(search.toLowerCase())
+  );
+
+
+
+
+
+  return (
+    <div id='body-container'>
+      <h1 id='heading'>EXPENSE TRACKER </h1>
+      <SearchBar searchTerm={search} onSearchChange={setSearch} />
+
+      <div id='expense-container'>
+        <Form onAddExpense={handleAddExpense} />
+        <ExpenseTable expenses={filteredExpenses} />
       </div>
+      
 
     </div>
   )
